@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Earth At Night</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/meta-icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/meta-icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/images/meta-icons/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/meta-icons/favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="mask-icon" href="assets/images/meta-icons/safari-pinned-tab.svg" color="#00011d">
+    <link rel="shortcut icon" href="assets/images/meta-icons/favicon.ico">
+    <meta name="msapplication-TileColor" content="#00011d">
+    <meta name="msapplication-TileImage" content="assets/images/meta-icons/mstile-144x144.png">
+    <meta name="msapplication-config" content="browserconfig.xml">
+    <meta name="theme-color" content="#00011d">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+        crossorigin="" />
+    <link href="https://fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poiret One', cursive;
+            overflow-x: hidden;
+            font-size: 18px;
+        }
+
+        #map {
+            height: 80vh;
+            background: #0f1f52;
+            font-family: 'Poiret One', cursive;
+        }
+
+        #fullscreen,
+        #fillscreen {
+            border: none;
+            background-color: #fff;
+            border-bottom: 1px solid #ccc;
+            line-height: 26px;
+            width: 30px;
+            height: 30px;
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            color: black;
+            position: absolute;
+            top: 100px;
+            left: 12px;
+            z-index: 1000;
+            cursor: pointer;
+            padding: 4px;
+            background-repeat: no-repeat;
+            background-position: center center;
+        }
+
+        #fullscreen {
+            background-image: url('assets/images/baseline-desktop_windows-24px.svg');
+        }
+
+        .fullscreen #fullscreen {
+            background-image: url('assets/images/baseline-tab-24px.svg');
+        }
+
+        #fillscreen {
+            top: 140px;
+            background-image: url('assets/images/baseline-fullscreen-24px.svg');
+        }
+
+        body.fillscreen #fillscreen {
+            background-image: url('assets/images/baseline-fullscreen_exit-24px.svg');
+        }
+
+        a {
+            color: inherit;
+            pointer-events: all;
+        }
+
+        main {
+            padding-left: 200px;
+        }
+
+        footer {
+            z-index: 100;
+            padding-top: 100px;
+            padding-left: 200px;
+        }
+
+        #map:-webkit-full-screen {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        body.fillscreen {
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+
+        body.fillscreen #map {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        body.blurred #map button, body.blurred #map .leaflet-control-container {
+            display: none;
+        }
+
+        @keyframes fade {
+            from {
+                opacity: 1,
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @media screen and (max-width: 800px) {
+            main,
+            footer {
+                padding-left: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map">
+        <button id="fullscreen">
+        </button>
+        <button id="fillscreen">
+        </button>
+    </div>
+
+
+    <main>
+        <h1>Earth at Night 🌌</h1>
+        <p>Date:
+            <script>
+                var date = new Date();
+                date.setDate(date.getDate() - 1);
+                document.write(date.toLocaleDateString())</script>
+        </p>
+        <p> Imagery provided by services from the Global Imagery Browse Services (GIBS), operated by the NASA/GSFC/Earth Science
+            Data and Information System (
+            <a target="_blank" href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.
+        </p>
+
+        <ul>
+            <li>Check out my
+                <a target="_blank" href="https://esstudio.site/blog">Blog</a> 🌙</li>
+            <li>Check out my other
+                <a href="_blank" href="https://esstudio.site/blog">Projects</a> 🌍</li>
+            <li>
+                <a href="_blank" href="https://ycae.esstudio.site/">Youtube Comments Generator</a> 🌇</li>
+            <li>
+                <a href="_blank" href="https://esstudio.site/echochamber-affinity/">Echo Chamber Affinity</a> ⚡</li>
+            <li>
+                <a href="_blank" href="https://play.google.com/store/apps/developer?id=EchoSierraStudio">Games/Apps</a> 🌌</li>
+            <li>
+                <a href="_blank" href="https://esstudio.site/newsfeeder/">NewsFeeder (RSS Reader and more)</a> 🌃</li>
+            <li>
+                <a href="_blank" href="https://play.google.com/store/apps/details?id=com.EchoSierraStudio.UniverseCreator">Universe Creator 🌠</a>
+            </li>
+            <li>
+                <a href="_blank" href="https://play.google.com/store/apps/developer?id=EchoSierraStudio">Games/Apps</a> 🌌</li>
+            <li>
+                <a href="_blank" href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=thankyousomuchyouareamazing@esstudio.site&item_name=ESStudio+/+Earth+at+Night&item_number=ESStudio+/+Earth+at+Night+Campain">Donate!</a> 💰</li>
+        </ul>
+    </main>
+
+    <footer>
+        Copyrights &copy; 2018 All Rights Reserved by
+        <a target="_blank" href="https://esstudio.site">Sem Postma</a>
+        <div>Icons made by
+            <a href="https://www.flaticon.com/authors/flat-icons" title="Flat Icons">Flat Icons</a> from
+            <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by
+            <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
+        </div>
+    </footer>
+
+
+    <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
+        crossorigin=""></script>
+
+    <script>
+        var elem = document.getElementById('map');
+        function fullscreen(e) {
+            var isInFullScreen = (document.fullscreenElement && document.fullscreenElement !== null) ||
+                (document.webkitFullscreenElement && document.webkitFullscreenElement !== null) ||
+                (document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
+                (document.msFullscreenElement && document.msFullscreenElement !== null);
+
+            document.body.classList[isInFullScreen ? 'remove' : 'add']('fullscreen');
+
+            if (!isInFullScreen) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.mozRequestFullScreen) {
+                    elem.mozRequestFullScreen();
+                } else if (elem.webkitRequestFullScreen) {
+                    elem.webkitRequestFullScreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+            setTimeout(function(){ map.invalidateSize()}, 50);
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        function fillscreen() {
+            setTimeout(function(){ map.invalidateSize(true)}, 50);
+            document.body.classList.toggle('fillscreen');
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        document.getElementById('fullscreen').onclick = fullscreen;
+        document.getElementById('fillscreen').onclick = fillscreen;
+        var map = L.map('map', {
+            maxZoom: 7,
+            attributionControl: false
+        });
+        Date.prototype.addDays = function (days) {
+            var date = new Date(this.valueOf());
+            date.setDate(date.getDate() + days);
+            return date;
+        };
+        Date.prototype.toISODateString = function () {
+            return this.toISOString().split('T')[0];
+        };
+        var NASAGIBS_ViirsEarthAtNight2012 = L.tileLayer('https://map1.vis.earthdata.nasa.gov/wmts-webmerc/VIIRS_CityLights_2012/\
+default/{time}/{tilematrixset}{maxZoom}/{z}/{y}/{x}.{format}', {
+                bounds: [[-85.0511287776, -179.999999975], [85.0511287776, 179.999999975]],
+                minZoom: 1,
+                maxZoom: 8,
+                format: 'jpg',
+                time: new Date().toISODateString(),
+                tilematrixset: 'GoogleMapsCompatible_Level'
+            }).addTo(map);
+        map.locate({ setView: true, maxZoom: 3 });
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js', { scope: './' })
+                .then(function (reg) {
+                    console.log('Registration succeeded. Scope is ' + reg.scope);
+                }).catch(function (error) {
+                    console.log('Registration failed with ' + error);
+                });
+        }
+
+        function blur() {
+            document.body.classList.add('blurred');
+        }
+
+        function focus() {
+            document.body.classList.remove('blurred');
+        }
+
+        window.onfocus = focus;
+        document.addEventListener('mouseout', function (evt) {
+            if (evt.toElement == null && evt.relatedTarget == null) {
+                blur();
+            }
+        });
+        window.onblur = blur;
+        map.addEventListener('mouseenter', focus);
+        map.addEventListener('touchenter', focus);
+        map.addEventListener('mousemove', focus);
+        map.addEventListener('touchmove', blur);
+        map.addEventListener('touchleave', blur);
+        map.addEventListener('mouseleave', blur);
+
+    </script>
+</body>
+
+</html>
