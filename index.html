@@ -91,7 +91,7 @@
 
         footer {
             z-index: 100;
-            padding-top: 100px;
+            padding-top: 30px;
             padding-left: 200px;
         }
 
@@ -111,7 +111,8 @@
             height: 100vh;
         }
 
-        body.blurred #map button, body.blurred #map .leaflet-control-container {
+        body.blurred #map button,
+        body.blurred #map .leaflet-control-container {
             display: none;
         }
 
@@ -155,6 +156,11 @@
             <a target="_blank" href="https://earthdata.nasa.gov">ESDIS</a>) with funding provided by NASA/HQ.
         </p>
 
+        <p>
+            Check out how the earth looks from space. This world map/chart is provided by nasa satellite images. The map wil always show
+            the most recent earth imaging.
+        </p>
+
         <ul>
             <li>Check out my
                 <a target="_blank" href="https://esstudio.site/blog">Blog</a> 🌙</li>
@@ -176,6 +182,26 @@
             <li>
                 <a href="_blank" href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=thankyousomuchyouareamazing@esstudio.site&item_name=ESStudio+/+Earth+at+Night&item_number=ESStudio+/+Earth+at+Night+Campain">Donate!</a> 💰</li>
         </ul>
+
+        <div id="image-of-the-day"></div>
+
+        <h2>Add this page to your home screen</h2>
+        <ul>
+            <li>Android: Menu icon ( ⋮ ) -&gt; "Add to homescreen" button</li>
+            <li>
+                iPhone, iPad, &amp; iPod Touch: Click the Share button on the browser’s toolbar (the rectangle with an arrow pointing upward).
+                Then click the "Add to Home Screen" button.
+            </li>
+            <li>
+                Edge: Menu icon ( ⋯ ) -&gt; "Pin this page to Start" or "Pin this page to taskbar"
+            </li>
+            <li>
+                Chrome: open this url: "chrome://flags/#enable-desktop-pwas"
+                <br>
+                <img style="max-width: 100%;" src="assets/images/chrome-enable-pwa.png">
+                <br> Menu icon ( ⋮ ) -&gt; "Install to desktop"
+            </li>
+        </ul>
     </main>
 
     <footer>
@@ -187,7 +213,6 @@
             <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
         </div>
     </footer>
-
 
     <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
         crossorigin=""></script>
@@ -223,12 +248,12 @@
                     document.msExitFullscreen();
                 }
             }
-            setTimeout(function(){ map.invalidateSize()}, 50);
+            setTimeout(function () { map.invalidateSize() }, 50);
             e.preventDefault();
             e.stopPropagation();
         }
         function fillscreen() {
-            setTimeout(function(){ map.invalidateSize(true)}, 50);
+            setTimeout(function () { map.invalidateSize(true) }, 50);
             document.body.classList.toggle('fillscreen');
             e.preventDefault();
             e.stopPropagation();
@@ -289,6 +314,20 @@ default/{time}/{tilematrixset}{maxZoom}/{z}/{y}/{x}.{format}', {
         map.addEventListener('touchleave', blur);
         map.addEventListener('mouseleave', blur);
 
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://api.nasa.gov/planetary/apod?api_key=pwW7VVbUpEfcl6MYuoAWSxpAMrJZT8s1bTP2p8Eq');
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var res = JSON.parse(xhr.responseText);
+                document.getElementById('image-of-the-day').innerHTML =
+                    '<h2>Nasa image of the day: ' + res.title + '</h2>\
+<img style="max-width: calc(100% - 10px);" src="' + res.url + '" alt="' + res.title + '" >\
+<p>' + res.explanation + '</p>\
+<small>copyright: ' + res.copyright + '<br>\
+date: ' + res.date + '';
+            }
+        }
+        xhr.send();
     </script>
 </body>
 
